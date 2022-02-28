@@ -1,3 +1,5 @@
+[![Watch the video](https://img.youtube.com/vi/v-r_12oezds/maxresdefault.jpg)](https://youtu.be/v-r_12oezds)
+
 # docker-lamp
 
 Docker with Apache, MySQL 8.0, PHPMyAdmin and PHP.
@@ -18,5 +20,3 @@ Run MySQL client:
 - `docker-compose exec db mysql -u root -p` 
 
 Infrastructure as code!
-
-![imagen](https://user-images.githubusercontent.com/7296281/151617771-f1e2e62c-306f-4eb7-bb10-1c448387b9a5.png)
