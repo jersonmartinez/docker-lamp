@@ -24,3 +24,8 @@ Run MySQL client:
 Infrastructure as code!
 
 You can read this a Spanish article in Crashell platform: [Apache, PHP, MySQL y PHPMyAdmin con Docker LAMP](https://www.crashell.com/estudio/apache_php_mysql_y_phpmyadmin_con_docker_lamp).
+
+
+### Infrastructure model
+
+![Infrastructure model](.infragenie/infrastructure_model.png)
