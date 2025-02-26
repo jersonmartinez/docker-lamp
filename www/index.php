@@ -134,7 +134,14 @@ require_once 'includes/config.php';
                 <div class="text-center mt-5 fade-in">
                     <p class="text-muted">
                         <small>
-                            Developed with <i class="fas fa-heart text-danger footer-heart"></i> by the Docker LAMP team
+                            Developed with <i class="fas fa-heart text-danger footer-heart"></i> by 
+                            <a href="https://www.linkedin.com/in/jersonmartinezsm/" 
+                               class="text-decoration-none" 
+                               target="_blank" 
+                               rel="noopener noreferrer"
+                               data-tooltip="View LinkedIn profile">
+                                Jerson Martínez
+                            </a>
                         </small>
                     </p>
                 </div>

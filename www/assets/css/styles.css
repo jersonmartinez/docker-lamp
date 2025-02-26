@@ -498,6 +498,16 @@ body {
     50% { transform: translateY(-3px); }
 }
 
+/* Author link in footer */
+.text-muted a {
+    color: var(--muted-color);
+    transition: color 0.3s ease;
+}
+
+.text-muted a:hover {
+    color: var(--text-color);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .navbar-nav {
