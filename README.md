@@ -7,6 +7,12 @@
 
 A modern and efficient LAMP stack (Linux, Apache, MySQL, PHP) development environment using Docker. Perfect for PHP development with a clean, easy-to-use interface and dark mode support.
 
+## 🎨 Interface Themes
+
+| Light Mode | Dark Mode |
+|------------|-----------|
+| ![Light Mode Interface](.infragenie/light-dockerlamp.png) | ![Dark Mode Interface](.infragenie/dark-dockerlamp.png) |
+
 ## 📺 Quick Overview
 
 Watch the tutorial video to get started:
