@@ -20,9 +20,9 @@ require_once 'includes/config.php';
             </a>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a href="https://github.com/jersonmartinez/docker-lamp" 
-                       class="nav-link social-link github-link" 
-                       target="_blank" 
+                    <a href="https://github.com/jersonmartinez/docker-lamp"
+                       class="nav-link social-link github-link"
+                       target="_blank"
                        rel="noopener noreferrer"
                        data-tooltip="View source code on GitHub">
                         <i class="fab fa-github"></i>
@@ -30,9 +30,9 @@ require_once 'includes/config.php';
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="https://www.youtube.com/watch?v=v-r_12oezds" 
-                       class="nav-link social-link youtube-link" 
-                       target="_blank" 
+                    <a href="https://www.youtube.com/watch?v=v-r_12oezds"
+                       class="nav-link social-link youtube-link"
+                       target="_blank"
                        rel="noopener noreferrer"
                        data-tooltip="Watch tutorial on YouTube">
                         <i class="fab fa-youtube"></i>
@@ -104,7 +104,7 @@ require_once 'includes/config.php';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php 
+                                    <?php
                                     $persons = getPersons($db);
                                     if (!empty($persons)):
                                         foreach ($persons as $person):
@@ -113,7 +113,7 @@ require_once 'includes/config.php';
                                             <td class="text-center"><?php echo htmlspecialchars($person['id']); ?></td>
                                             <td><?php echo htmlspecialchars($person['name']); ?></td>
                                         </tr>
-                                    <?php 
+                                    <?php
                                         endforeach;
                                     else:
                                     ?>
@@ -134,13 +134,13 @@ require_once 'includes/config.php';
                 <div class="text-center mt-5 fade-in">
                     <p class="text-muted">
                         <small>
-                            Developed with <i class="fas fa-heart text-danger footer-heart"></i> by 
-                            <a href="https://www.linkedin.com/in/jersonmartinezsm/" 
-                               class="text-decoration-none" 
-                               target="_blank" 
+                            Developed with <i class="fas fa-heart text-danger footer-heart"></i> by
+                            <a href="https://www.linkedin.com/in/jersonmartinezsm/"
+                               class="text-decoration-none"
+                               target="_blank"
                                rel="noopener noreferrer"
                                data-tooltip="View LinkedIn profile">
-                                Jerson Martínez
+                                Josar Monterrosa
                             </a>
                         </small>
                     </p>

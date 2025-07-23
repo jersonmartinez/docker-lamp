@@ -9,8 +9,8 @@ ARG PHP_POST_MAX_SIZE=20M
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 # Update and install dependencies
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+RUN apt update \
+    && apt install -y --no-install-recommends \
         libpng-dev \
         libzip-dev \
         zlib1g-dev \
