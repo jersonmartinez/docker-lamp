@@ -4,5 +4,10 @@
 *.log
 /dump/*
 !/dump/.gitkeep
+!/dump/00-restore-dumps.sh
+!/dump/sql/
+/dump/sql/*
+!/dump/sql/myDb.sql
+!/dump/sql/.gitkeep
 .DS_Store
 !/www/.gitkeep
