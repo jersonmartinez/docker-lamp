@@ -79,6 +79,56 @@ MYSQL_PASSWORD=your_password
 - Apache: 2.4
 - PHPMyAdmin: Latest
 
+## 🧩 Serving Your Own Application
+
+The template ships with a demo under `www/`. To serve your own PHP application
+instead, place its code in `www/` and point your browser at it:
+
+- **Served at the root** (`http://localhost/`): put your front controller
+  (`index.php`) directly in `www/`.
+- **Served under a sub-path** (`http://localhost/myapp/`): put the code in
+  `www/myapp/`. Choose this if your app's path logic expects a base sub-path.
+
+### Bind mount and writes
+
+The `www` service mounts `./www` into the container. By default it is mounted
+**read-only** (`:ro`) so the app cannot mutate its own source. If your app
+writes to disk at runtime (file uploads, cache, compiled templates, logs),
+change the mount to `:rw` in `docker-compose.yml`, or mount only the writable
+sub-paths as `:rw`.
+
+### Database connection
+
+The database is reachable at hostname **`db`** (the compose service name) on
+port `3306`. Map your app's database settings to the compose variables:
+
+| Your app expects | Set it to |
+|------------------|-----------|
+| DB host          | `db` |
+| DB name          | `MYSQL_DATABASE` |
+| DB user          | `MYSQL_USER` (or `root`) |
+| DB password      | `MYSQL_PASSWORD` (or `MYSQL_ROOT_PASSWORD`) |
+
+If your app reads its own environment variables (e.g. `DB_HOST`, `DB_USER`),
+add them to the `www` service's `environment:` block in `docker-compose.yml`.
+
+### MySQL vs MariaDB
+
+The default engine is **MySQL 8** (`DB_IMAGE=mysql:8.0`). Some applications
+depend on **MariaDB-only** SQL — most commonly
+`ALTER TABLE ... ADD COLUMN IF NOT EXISTS`, which MySQL 8 rejects with
+`ERROR 1064`. If your app targets MariaDB, set `DB_IMAGE=mariadb:11.4` in your
+`.env` (no compose edit needed) and start from an empty database volume
+(`docker compose down -v`), since the two engines use incompatible data
+directories.
+
+### Seeding the database
+
+Any `*.sql` file placed in `./dump/` is executed on first boot of a **fresh**
+database volume (via MySQL/MariaDB's `docker-entrypoint-initdb.d`). It does
+**not** run against an already-initialized volume — run
+`docker compose down -v` first to re-seed.
+
 ## 📁 Project Structure
 
 ```

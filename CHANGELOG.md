@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- `DB_IMAGE` variable to select the database engine image without editing the
+  compose file (defaults to `mysql:8.0`; set `mariadb:11.4` for MariaDB apps)
+- `MYSQL_HOST` to `.env.example` (it was referenced by `docker-compose.yml`
+  but missing from the example — environment drift)
+- Apache `AllowOverride All` + `Require all granted` for `/var/www/html/` and a
+  global `ServerName`, so `.htaccess` rewrite rules of hosted apps are honored
+- README "Serving Your Own Application" section (code location, bind mount,
+  `:ro` vs `:rw`, DB connection mapping, MySQL vs MariaDB, DB seeding)
+- Inline note on the `www` docroot mount explaining `:ro` vs `:rw`
+
+### Changed
+- Removed the obsolete top-level `version:` key from `docker-compose.yml`
+  (deprecated in Compose v2+ and emits a warning)
+
+### Fixed
+- Dropped the `--default-authentication-plugin=mysql_native_password` command
+  from the `db` service — it is MySQL-only and prevents the service from
+  starting under a MariaDB image
+
 ## [1.1.0] - 2025-02-26
 
 ### Added
