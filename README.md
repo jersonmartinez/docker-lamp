@@ -122,12 +122,47 @@ depend on **MariaDB-only** SQL — most commonly
 (`docker compose down -v`), since the two engines use incompatible data
 directories.
 
-### Seeding the database
+### Importing a database dump
 
-Any `*.sql` file placed in `./dump/` is executed on first boot of a **fresh**
-database volume (via MySQL/MariaDB's `docker-entrypoint-initdb.d`). It does
-**not** run against an already-initialized volume — run
-`docker compose down -v` first to re-seed.
+Put your dump(s) in **`./dump/sql/`** (not directly in `./dump/`) and they are
+restored automatically. Two paths are supported:
+
+**A. On a fresh volume (automatic).** On the first boot of an empty database
+volume, `dump/00-restore-dumps.sh` imports every `*.sql` under `dump/sql/`.
+This wrapper exists because the raw `docker-entrypoint-initdb.d` has two sharp
+edges it smooths over:
+
+- it runs only top-level files and **does not recurse**, so a nested path
+  (`dump/sql/backup/foo.sql`) silently never loads — the wrapper finds them all;
+- a **MySQL-8 dump restored on MariaDB** fails with `errno 150`
+  ("foreign key incorrectly formed") because the collations differ
+  (`utf8mb4_0900_ai_ci` vs MariaDB's `utf8mb4_uca1400_ai_ci`) — the wrapper
+  rewrites `COLLATE=` in the DDL to the engine's native collation so FKs form.
+
+```bash
+docker compose up -d          # fresh volume -> dumps in dump/sql/ auto-restore
+```
+
+**B. Into a running stack (re-import, no volume reset).** The initdb path only
+runs on an **empty** volume. To (re)load a dump into a stack that already has
+data — without `docker compose down -v` — use the importer:
+
+```bash
+scripts/import-db.sh                       # newest dump under ./dump, defaults from .env
+scripts/import-db.sh --dump dump/sql/prod.sql --expect-tables 13
+scripts/import-db.sh --project myproj --web-service www
+```
+
+It resolves the dump (even if nested), normalises collation for MariaDB,
+**stops the web service** so the app cannot recreate tables mid-import, loads
+the dump, restarts the web service, and prints a table count + per-table row
+report (failing if `--expect-tables` does not match).
+
+> **Non-destructive by design.** Neither the wrapper nor `import-db.sh` issues
+> `DROP DATABASE`/`DROP TABLE`. A `mysqldump` already carries its own
+> `DROP TABLE IF EXISTS` per table, so a re-import idempotently replaces exactly
+> the objects it defines. Collation rewriting is anchored on `COLLATE=`, so only
+> DDL is touched, never row data.
 
 ## 📁 Project Structure
 
@@ -135,6 +170,11 @@ database volume (via MySQL/MariaDB's `docker-entrypoint-initdb.d`). It does
 docker-lamp/
 ├── .env                 # Environment variables
 ├── docker-compose.yml   # Docker services configuration
+├── scripts/
+│   └── import-db.sh     # Re-import a dump into a running stack (non-destructive)
+├── dump/
+│   ├── 00-restore-dumps.sh  # Fresh-volume init: normalises collation + imports
+│   └── sql/             # Put your *.sql dump(s) here
 ├── www/                 # Web root directory
 │   ├── index.php       # Main application file
 │   ├── assets/         # CSS, JS, and other assets
@@ -164,6 +204,8 @@ docker-lamp/
   - Server: db
   - Username: root
   - Password: (from .env file)
+- Import / re-import a dump with `scripts/import-db.sh` (see
+  [Importing a database dump](#importing-a-database-dump)).
 
 ## 📚 Documentation
 
