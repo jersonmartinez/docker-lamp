@@ -1,12 +1,9 @@
-version: "3.8"
-
 services:
     db:
-        image: mysql:8.0
+        image: ${DB_IMAGE:-mysql:8.0}
         restart: unless-stopped
         ports: 
             - "127.0.0.1:${MYSQL_PORT}:3306"
-        command: --default-authentication-plugin=mysql_native_password
         environment:
             MYSQL_DATABASE: ${MYSQL_DATABASE}
             MYSQL_USER: ${MYSQL_USER}
@@ -41,6 +38,10 @@ services:
         ports: 
             - "127.0.0.1:${APACHE_PORT}:80"
         volumes:
+            # Read-only is the safe default (your app cannot mutate its own
+            # source). If your application writes to disk at runtime (uploads,
+            # cache, compiled templates, logs), change ":ro" to ":rw" or mount
+            # only the writable sub-paths.
             - ./www:/var/www/html:ro
         depends_on:
             - db

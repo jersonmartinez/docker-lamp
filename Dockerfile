@@ -37,6 +37,22 @@ RUN a2enmod rewrite headers ssl
 RUN sed -i 's/ServerTokens OS/ServerTokens Prod/' /etc/apache2/conf-available/security.conf \
     && sed -i 's/ServerSignature On/ServerSignature Off/' /etc/apache2/conf-available/security.conf
 
+# Allow per-directory overrides (.htaccess) under the web root.
+# Debian's default <Directory /var/www/> block sets AllowOverride None, so
+# `a2enmod rewrite` alone is not enough: any application that ships a
+# .htaccess (WordPress, Laravel's public/, custom front controllers) has its
+# rewrite/ErrorDocument rules silently ignored without this. Also set a global
+# ServerName to suppress the "could not reliably determine the server's fully
+# qualified domain name" startup warning.
+RUN printf '%s\n' \
+      '<Directory /var/www/html/>' \
+      '    AllowOverride All' \
+      '    Require all granted' \
+      '</Directory>' \
+      'ServerName localhost' \
+      > /etc/apache2/conf-available/docker-lamp.conf \
+    && a2enconf docker-lamp
+
 # Create a non-root user
 RUN useradd -r -u 1000 -g www-data webuser
 
